@@ -73,27 +73,4 @@ class RecipientList
 
         return $this->recipientList;
     }
-
-
-    /**
-     * Check if user subscribed to list
-     *
-     * @param string $email E-Mail
-     * @return bool
-     */
-    public function hasSubscriber($email)
-    {
-        $this->api->getRecipient($email, $this->recipientList);
-    }
-
-
-    /**
-     * Get id
-     *
-     * @return int Recipient list id
-     */
-    public function id()
-    {
-        return $this->recipientList->id;
-    }
 }
