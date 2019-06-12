@@ -121,7 +121,7 @@ class Recipient
      *
      * @return object Recipient object
      */
-    public function __set($property, $value): void
+    public function __set($property, $value)
     {
 
         if (!in_array($property, $this->properties)) {
