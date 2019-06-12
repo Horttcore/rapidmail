@@ -147,6 +147,20 @@ class Recipient
         return $this;
     }
 
+    /**
+     * Delete a recipient
+     * 
+     * @return object response object
+     */
+    public function delete()
+    {
+        if( $this->recipientId == 0) {
+            return;
+        }
+
+        $response = $this->api->delete(sprintf('%s/%d', $this->endpoint, $this->recipientId));
+        return $response;
+    }
 
 
 

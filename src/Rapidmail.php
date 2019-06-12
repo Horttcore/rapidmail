@@ -127,6 +127,18 @@ class Rapidmail implements RapidmailApiInterface
         return $this->request($endpoint, $params, 'post');
     }
 
+    /**
+     * Send delete request
+     *
+     * @param string $endpoint Request endpoint
+     * @param array  $params   Request parameters
+     * 
+     * @return object
+     */
+    public function delete($endpoint, $params = [])
+    {
+        return $this->request($endpoint, $params, 'delete');
+    }
 
     /**
      * Request
