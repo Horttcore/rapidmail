@@ -1,7 +1,7 @@
 <?php
-namespace Horttcore\Rapidmail;
+namespace RalfHortt\Rapidmail;
 
-use Horttcore\Rapidmail\RapidmailApiInterface;
+use \RalfHortt\Rapidmail\RapidmailApiInterface;
 
 class RecipientList
 {
@@ -10,7 +10,7 @@ class RecipientList
     /**
      * API
      *
-     * @var Horttcore\Rapidmail\RapidmailAPI
+     * @var \RalfHortt\Rapidmail\RapidmailApiInterface
      */
     protected $api;
 
@@ -42,11 +42,12 @@ class RecipientList
     /**
      * Class constructor
      *
-     * @param Api $api API layer
+     * @param Api $api             API layer
      * @param int $recipientlistID Recipient list ID
+     * 
      * @return return type
      */
-    public function __construct(RapidmailApiInterface $api, int $recipientlistID = 0)
+    public function __construct(\RalfHortt\Rapidmail\RapidmailApiInterface $api, int $recipientlistID = 0)
     {
         $this->recipientlistID = $recipientlistID;
         $this->api = $api;
@@ -66,7 +67,7 @@ class RecipientList
      */
     public function get()
     {
-        if ( !$this->recipientList ) {
+        if (!$this->recipientList) {
             $this->response = $this->api->get(sprintf($this->endpoint, $this->recipientlistID));
             $this->recipientList = $this->response;
         }

@@ -1,5 +1,5 @@
 <?php
-namespace Horttcore\Rapidmail;
+namespace RalfHortt\Rapidmail;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
@@ -44,8 +44,9 @@ class Rapidmail implements RapidmailApiInterface
     /**
      * Class constructor
      *
-     * @param string $user User name
+     * @param string $user     User name
      * @param string $password User password
+     * 
      * @return void
      */
     public function __construct($user, $password)
@@ -53,9 +54,11 @@ class Rapidmail implements RapidmailApiInterface
         $this->user = $user;
         $this->password = $password;
 
-        $this->client = new Client([
-            'base_uri' => $this->baseURI
-        ]);
+        $this->client = new Client(
+            [
+                'base_uri' => $this->baseURI
+            ]
+        );
 
         $this->requestHeader = [
             'Accept' => 'application/json',
@@ -71,6 +74,7 @@ class Rapidmail implements RapidmailApiInterface
      * Build request array
      *
      * @param array $params Query parameters
+     * 
      * @return array Request array
      */
     public function buildRequest($params)
@@ -78,7 +82,6 @@ class Rapidmail implements RapidmailApiInterface
         $request['headers'] = $this->requestHeader;
         $request['auth'] = $this->requestAuthentication;
         $request = array_merge($request, $params);
-
         return $request;
     }
 
@@ -87,7 +90,8 @@ class Rapidmail implements RapidmailApiInterface
      * Send get request
      *
      * @param string $endpoint Request endpoint
-     * @param array $params
+     * @param array  $params   Query parameters
+     * 
      * @return object
      */
     public function get($endpoint, $params = [])
@@ -100,7 +104,8 @@ class Rapidmail implements RapidmailApiInterface
      * Send patch request
      *
      * @param string $endpoint Request endpoint
-     * @param array $params
+     * @param array  $params   Query parameters
+     * 
      * @return object
      */
     public function patch($endpoint, $params = [])
@@ -113,7 +118,8 @@ class Rapidmail implements RapidmailApiInterface
      * Send post request
      *
      * @param string $endpoint Request endpoint
-     * @param array $params
+     * @param array  $params   Request parameters
+     * 
      * @return object
      */
     public function post($endpoint, $params = [])
@@ -126,6 +132,9 @@ class Rapidmail implements RapidmailApiInterface
      * Request
      *
      * @param string $endpoint Endpoint
+     * @param array  $params   Query parameters
+     * @param string $method   Request type
+     * 
      * @return object
      */
     public function request($endpoint, $params = [], $method = 'get')

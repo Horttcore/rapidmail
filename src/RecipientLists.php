@@ -1,7 +1,7 @@
 <?php
-namespace Horttcore\Rapidmail;
+namespace RalfHortt\Rapidmail;
 
-use Horttcore\Rapidmail\RapidmailApiInterface;
+use \RalfHortt\Rapidmail\RapidmailApiInterface;
 
 class RecipientLists
 {
@@ -10,7 +10,7 @@ class RecipientLists
     /**
      * API
      *
-     * @var Horttcore\Rapidmail\RapidmailAPI
+     * @var RalfHortt\Rapidmail\RapidmailAPI
      */
     protected $api;
 
@@ -68,8 +68,9 @@ class RecipientLists
     /**
      * Class constructor
      *
-     * @param RapidmailApiInterface $api API layer
-     * @param int $page Recipient list page
+     * @param RapidmailApiInterface $api  API layer
+     * @param int                   $page Recipient list page
+     * 
      * @return RecipientLists
      */
     public function __construct(RapidmailApiInterface $api, int $page = 1)
@@ -86,7 +87,7 @@ class RecipientLists
      */
     public function get(): array
     {
-        if ( !$this->recipientLists ) {
+        if (!$this->recipientLists) {
             $this->make();
         }
 
@@ -103,9 +104,9 @@ class RecipientLists
     {
         $this->get();
 
-        for  ( $i = 2; $i <= $this->pages(); $i++ ) {
+        for ($i = 2; $i <= $this->pages(); $i++) {
             $list = new RecipientLists($this->api, $this->page() + 1);
-            $this->recipientLists += $list->get(); 
+            $this->recipientLists += $list->get();
         }
 
         return $this->recipientLists;
@@ -130,11 +131,14 @@ class RecipientLists
      **/
     public function make(): void
     {
-        $this->response = $this->api->get($this->endpoint, [
-            'page' => $this->page
-        ]);
+        $this->response = $this->api->get(
+            $this->endpoint,
+            [
+                'page' => $this->page
+            ]
+        );
 
-        if ( !isset( $this->response->_embedded ) ) {
+        if (!isset($this->response->_embedded)) {
             return;
         }
 

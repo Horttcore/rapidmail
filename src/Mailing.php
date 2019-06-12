@@ -1,7 +1,7 @@
 <?php
-namespace Horttcore\Rapidmail;
+namespace RalfHortt\Rapidmail;
 
-use Horttcore\Rapidmail\RapidmailApiInterface;
+use RalfHortt\Rapidmail\RapidmailApiInterface;
 
 class Mailing
 {
@@ -10,7 +10,7 @@ class Mailing
     /**
      * API
      *
-     * @var Horttcore\Rapidmail\RapidmailApiInterface
+     * @var RalfHortt\Rapidmail\RapidmailApiInterface
      */
     protected $api;
 
@@ -42,10 +42,10 @@ class Mailing
     /**
      * Class constructor
      *
-     * @param Api $api API layer
-     * @param int $recipientlistID Recipient list ID
+     * @param Api $api       API layer
+     * @param int $mailingId Mailing ID
      */
-    public function __construct(RapidmailApiInterface $api, $mailingId = null)
+    public function __construct(RapidmailApiInterface $api, int $mailingId = null)
     {
         $this->api = $api;
         $this->mailingId = $mailingId;
@@ -56,28 +56,34 @@ class Mailing
     /**
      * Get mailing
      *
+     * @param int $mailingId Mailing ID
+     * 
      * @return object Mailing object
      */
     public function get(int $mailingId = null)
     {
-        if ( $mailingId )
+        if ($mailingId) {
             $this->mailingId = $mailingId;
+        }
 
         $this->mailing = $this->api->get(sprintf('%s/%d', $this->endpoint, $this->mailingId));
-        
+
         return $this;
     }
 
 
     /**
      * Get mailing property
+     * 
+     * @param string $property Property
      *
      * @return object Mailing object
      */
-    public function __get($property) 
+    public function __get(string $property)
     {
-        if ( !isset($this->mailing->$property) )
+        if (!isset($this->mailing->$property)) {
             throw new \Exception('Unknown property');
+        }
 
         return $this->mailing->$property;
     }
@@ -85,25 +91,30 @@ class Mailing
 
     /**
      * Set mailing property
+     * 
+     * @param string $property Property
+     * @param mixed  $value    Value
      *
      * @return object Mailing object
      */
-    public function __set($property, $value): void 
+    public function __set($property, $value): void
     {
-        if ( !method_exists($this, 'set'. $property))
+        if (!method_exists($this, 'set' . $property)) {
             throw new \Exception('Unknown property');
+        }
 
-        call_user_func([$this, 'set'. $property], $value);
+        call_user_func([$this, 'set' . $property], $value);
     }
 
-    
+
     /**
      * Set from name
      *
      * @param string $value From name
+     * 
      * @return void
      */
-    protected function setFromName( string $value ): void
+    protected function setFromName(string $value): void
     {
         $this->mailing->from_name = filter_var($value, FILTER_SANITIZE_STRING);
     }
@@ -113,9 +124,10 @@ class Mailing
      * Set from email
      *
      * @param string $value From email
+     * 
      * @return void
      */
-    protected function setFromEmail( string $value ): void
+    protected function setFromEmail(string $value): void
     {
         $this->mailing->from_email = filter_var($value, FILTER_SANITIZE_EMAIL);
     }
@@ -125,9 +137,10 @@ class Mailing
      * Set subject
      *
      * @param string $value Subject
+     * 
      * @return void
      */
-    protected function setSubject(string $value ): void
+    protected function setSubject(string $value): void
     {
         $this->mailing->subject = filter_var($value, FILTER_SANITIZE_STRING);
     }
@@ -137,9 +150,10 @@ class Mailing
      * Set send date
      *
      * @param string $value Send date in the format Y-m-d H:i:s
+     * 
      * @return void
      */
-    protected function setSendAt( string $value ): void
+    protected function setSendAt(string $value): void
     {
         $value = filter_var($value, FILTER_SANITIZE_STRING);
         $value = new \DateTime($value);
@@ -151,9 +165,10 @@ class Mailing
      * Set robinsonlist checking
      *
      * @param bool $value Robinsonlist checking
+     * 
      * @return void
      */
-    protected function setCheckRobinson( bool $value ): void
+    protected function setCheckRobinson(bool $value): void
     {
         $this->mailing->check_robinson = filter_var($value, FILTER_VALIDATE_BOOLEAN);
     }
@@ -163,9 +178,10 @@ class Mailing
      * Set austrian ECG list checking (only for austria)
      *
      * @param bool $value CG list checking
+     * 
      * @return void
      */
-    protected function setCheckEcg( bool $value ): void
+    protected function setCheckEcg(bool $value): void
     {
         $this->mailing->check_ecg = filter_var($value, FILTER_VALIDATE_BOOLEAN);
     }
@@ -175,9 +191,10 @@ class Mailing
      * Set Hostname to use. Must be a valid and confirmed hostname. If omitted, default user hostname will be used.
      *
      * @param bool $value Hostname
+     * 
      * @return void
      */
-    protected function setHost( string $value ): void
+    protected function setHost(string $value): void
     {
         $this->mailing->host = filter_var($value, FILTER_SANITIZE_STRING);
     }
@@ -187,9 +204,10 @@ class Mailing
      * Set if the mailing is a A/B split mailing
      *
      * @param bool $value Attachments count
+     * 
      * @return void
      */
-    protected function setFeatureMailingsplit( bool $value ): void
+    protected function setFeatureMailingsplit(bool $value): void
     {
         $this->mailing->feature_mailingsplit = filter_var($value, FILTER_VALIDATE_BOOLEAN);
     }
@@ -199,9 +217,10 @@ class Mailing
      * Set attachments count
      *
      * @param int $value Attachments count
+     * 
      * @return void
      */
-    protected function setAttachments( int $value ): void
+    protected function setAttachments(int $value): void
     {
         $this->mailing->attachments = filter_var($value, FILTER_SANITIZE_NUMBER_INT);
     }
@@ -211,15 +230,18 @@ class Mailing
      * Set file
      *
      * @param string $value Path to zip file 
+     * 
      * @return void
      */
-    protected function setFile( string $value ): void
+    protected function setFile(string $value): void
     {
-        if ( !file_exists( $value ) )
+        if (!file_exists($value)) {
             throw new \Exception('File does not exists');
-            
-        if ( !is_readable( $value ))
+        }
+
+        if (!is_readable($value)) {
             throw new \Exception('File is not readable');
+        }
 
         $file = new \stdClass;
         $file->content = base64_encode(file_get_contents($value));
@@ -232,12 +254,14 @@ class Mailing
      * Set status
      *
      * @param string <draft|scheduled> $value Status 
+     * 
      * @return void
      */
-    protected function setStatus( string $value ): void
+    protected function setStatus(string $value): void
     {
-        if ( 'draft' != $value && 'scheduled' != $value )
+        if ('draft' != $value && 'scheduled' != $value) {
             throw new \Exception('Invalid value for status');
+        }
 
         $this->mailing->status = filter_var($value, FILTER_SANITIZE_STRING);
     }
@@ -247,9 +271,10 @@ class Mailing
      * Set recipient list ID
      *
      * @param string $value Recipient list ID
+     * 
      * @return void
      */
-    protected function setRecipientListId( string $value): void
+    protected function setRecipientListId(string $value): void
     {
         $recipient = new \stdClass;
         $recipient->type = 'recipientlist';
@@ -280,8 +305,9 @@ class Mailing
      * @todo
      * @return void
      */
-    public function pause() 
+    public function pause()
     {
+        //
     }
 
 
@@ -291,9 +317,8 @@ class Mailing
      * @todo
      * @return void
      */
-    public function cancel() 
+    public function cancel()
     {
+        //
     }
-
-
 }

@@ -1,13 +1,15 @@
 <?php
-namespace Horttcore\Rapidmail;
+namespace RalfHortt\Rapidmail;
 
-interface RapidmailApiInterface {
+interface RapidmailApiInterface
+{
 
-   /**
+    /**
      * Send get request
      *
      * @param string $endpoint Request endpoint
-     * @param array $params
+     * @param array  $params   Request parameters
+     * 
      * @return object
      */
     public function get($endpoint, $params = []);
@@ -17,7 +19,8 @@ interface RapidmailApiInterface {
      * Send patch request
      *
      * @param string $endpoint Request endpoint
-     * @param array $params
+     * @param array  $params   Request parameters
+     * 
      * @return object
      */
     public function patch($endpoint, $params);
@@ -27,9 +30,9 @@ interface RapidmailApiInterface {
      * Send post request
      *
      * @param string $endpoint Request endpoint
-     * @param array $params
+     * @param array  $params   Request parameters
+     * 
      * @return object
      */
     public function post($endpoint, $params);
-
 }
