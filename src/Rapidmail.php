@@ -96,7 +96,7 @@ class Rapidmail implements RapidmailApiInterface
      */
     public function get($endpoint, $params = [])
     {
-        return $this->request($endpoint, $params);
+        return $this->request($endpoint, ['query' => $params]);
     }
 
 

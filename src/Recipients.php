@@ -78,7 +78,7 @@ class Recipients
             )
         );
 
-        $query['recipientlist_id'] = $this->recipientListId;
+        $this->query['recipientlist_id'] = $this->recipientListId;
 
         return $this->api->get($this->endpoint, $this->query);
     }
