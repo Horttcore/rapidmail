@@ -40,6 +40,13 @@ class Rapidmail implements RapidmailApiInterface
      */
     protected $user;
 
+    /** 
+     * Response
+     * 
+     * @var string
+    */
+    protected $response;
+
 
     /**
      * Class constructor
@@ -96,6 +103,7 @@ class Rapidmail implements RapidmailApiInterface
      */
     public function get($endpoint, $params = [])
     {
+
         return $this->request($endpoint, ['query' => $params]);
     }
 
@@ -127,6 +135,18 @@ class Rapidmail implements RapidmailApiInterface
         return $this->request($endpoint, $params, 'post');
     }
 
+    /**
+     * Send delete request
+     *
+     * @param string $endpoint Request endpoint
+     * @param array  $params   Request parameters
+     * 
+     * @return object
+     */
+    public function delete($endpoint, $params = [])
+    {
+        return $this->request($endpoint, $params, 'delete');
+    }
 
     /**
      * Request
@@ -140,15 +160,63 @@ class Rapidmail implements RapidmailApiInterface
     public function request($endpoint, $params = [], $method = 'get')
     {
         try {
-            $response = $this->client->$method($endpoint, $this->buildRequest($params));
-            return \json_decode($response->getBody()->getContents());
+            $this->response = $this->client->$method($endpoint, $this->buildRequest($params));
+            // return the response directly to avoid breaking get requests
+            return \json_decode($this->response->getBody()->getContents());
         } catch (ClientException $e) {
             if (!$e->hasResponse()) {
                 return false;
             }
+            $this->response = $e->getResponse();
 
             $pretty = new JsonPretty();
-            echo $pretty->prettify((string)$e->getResponse()->getBody()) . PHP_EOL;
+            
+            return $pretty->prettify( (string)$e->getResponse()->getBody() ) . PHP_EOL;
+        }
+    }
+
+    public function getStatusCode()
+    {
+        if ( !$this->response ){
+            return '';
+        }
+
+        return $this->response->getStatusCode();
+    }
+
+    public function getReponseMessage()
+    {
+        if ( !$this->response ) {
+            return '';
+        }
+
+        return \json_decode( $this->response->getBody()->getContents() );
+    }
+
+    public function getTranslatedMessage($_messages = [])
+    {
+        $messages = array_filter(
+            array_replace(
+                [
+                    200 => 'Ok',
+                    201 => 'Erstellt',
+                    204 => 'Kein Inhalt',
+                    400 => 'Client Fehler',
+                    401 => 'Unautorisiert',
+                    403 => 'Verboten',
+                    404 => 'Nicht gefunden',
+                    406 => 'Nicht akzeptierbar',
+                    409 => 'Adresse existiert bereits',
+                    415 => 'Nicht unterstützter Medien Typ',
+                    422 => 'Validierungsfehler'
+                ],
+                $_messages
+            )
+        );
+        if ( array_key_exists($this->getStatusCode(), $messages) ) {
+            return $messages[$this->getStatusCode()];
+        } else {
+            return '';
         }
     }
 }
