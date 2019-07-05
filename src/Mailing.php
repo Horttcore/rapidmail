@@ -157,7 +157,7 @@ class Mailing
     {
         $value = filter_var($value, FILTER_SANITIZE_STRING);
         $value = new \DateTime($value);
-        $this->mailing->send_at = $value->format('Y-m-d H:i:s');
+        $this->mailing->send_at = $value->format('Y-m-d\TH:i:s');
     }
 
 
